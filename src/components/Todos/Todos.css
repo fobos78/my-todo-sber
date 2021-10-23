@@ -18,3 +18,18 @@
     justify-content: center;
     align-items: center;
 }
+.Action {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: black 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+.WrapTodo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

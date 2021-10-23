@@ -1,15 +1,11 @@
 import React from 'react';
-import './InputTodo.css';
 import axios from "axios";
 
+import './InputTodo.css';
 import Todos from '../Todos';
 import ManyActionTodo from "../ManyActionTodo";
+import {Todo} from "../../types/Todo";
 
-export interface Todo {
-    id: number;
-    title: string;
-    done: boolean;
-}
 
 function InputTodo() {
     const [myTodos, setMyTodos] = React.useState<Todo[]>([]);
@@ -18,7 +14,7 @@ function InputTodo() {
     function changTodo() {
         const id = Math.random();
         if (myTodo.length) {
-            setMyTodos((prev) => [...prev, {id, title: myTodo, done: false}]);
+            setMyTodos((prev) => [...prev, {id, title: myTodo, done: false, select: false}]);
             setMyTodo("");
         } else {
             alert('Вы не ввели задачу!')
@@ -36,7 +32,7 @@ function InputTodo() {
                 <input onChange={changTodos} value={myTodo}/>
                 <button type="button" onClick={changTodo}>Добавить</button>
             </div>
-            <ManyActionTodo />
+            <ManyActionTodo setMyTodos={setMyTodos}/>
             <Todos myTodos={myTodos} setMyTodos={setMyTodos}/>
         </div>
     );
