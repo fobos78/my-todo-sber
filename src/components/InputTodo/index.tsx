@@ -18,7 +18,7 @@ function InputTodo() {
     function changTodo() {
         const id = Math.random();
         if (myTodo.length) {
-            setMyTodos((prev) => [...prev, {id, title: myTodo, done: true}]);
+            setMyTodos((prev) => [...prev, {id, title: myTodo, done: false}]);
             setMyTodo("");
         } else {
             alert('Вы не ввели задачу!')
