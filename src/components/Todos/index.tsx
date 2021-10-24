@@ -2,19 +2,21 @@ import React from 'react';
 
 import './Todos.css';
 import {Todo} from "../../types/Todo";
+import {deleteTodo, updateTodo} from "../../request";
 
 interface ITodos{
     myTodos: Todo[],
     setMyTodos: (myTodos: (prev: Todo[]) => Todo[]) => void;
+    setLoadTodo: (loadTodo: (prev: boolean) => boolean) => void;
 }
 
-function Todos({myTodos, setMyTodos}: ITodos) {
+function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
 
-    function checkBox(id: number, done: boolean) {
-        done ? doneTodo(id) : notDoneTodo(id);
+    async function checkBox(id: number, done: boolean) {
+        done ? await doneTodo(id) : await notDoneTodo(id);
     }
 
-    function doneTodo(id: number) {
+    async function doneTodo(id: number) {
         setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
             if (el.id === id) {
                 el.done = false;
@@ -25,7 +27,7 @@ function Todos({myTodos, setMyTodos}: ITodos) {
         }));
     }
 
-    function notDoneTodo(id: number) {
+    async function notDoneTodo(id: number) {
         setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
             if (el.id === id) {
                 el.done = true;
@@ -36,10 +38,9 @@ function Todos({myTodos, setMyTodos}: ITodos) {
         }));
     }
 
-    function delTodo(id: number) {
-        setMyTodos((prev: Todo[]) => prev.filter((el: Todo) => {
-            return id !== el.id;
-        }));
+    async function delTodo(id: number) {
+        await deleteTodo(id + '');
+        setLoadTodo(prev => !prev);
     }
 
     function checkSelect(id: number, select: boolean) {
@@ -71,7 +72,7 @@ function Todos({myTodos, setMyTodos}: ITodos) {
 
     return (
         <div className="Todos">
-            {myTodos.map(todo =>
+            {myTodos && myTodos.map(todo =>
                 <div key={todo.id} className="WrapTodo">
                     <div className="Action"
                          style={{backgroundColor: todo.select ? "lightgreen" : "white"}}

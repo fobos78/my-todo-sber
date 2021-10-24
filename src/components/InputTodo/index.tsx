@@ -1,20 +1,22 @@
 import React from 'react';
-import axios from "axios";
 
 import './InputTodo.css';
 import Todos from '../Todos';
 import ManyActionTodo from "../ManyActionTodo";
 import {Todo} from "../../types/Todo";
+import {getTodo, creatTodo} from "../../request";
 
 
 function InputTodo() {
     const [myTodos, setMyTodos] = React.useState<Todo[]>([]);
     const [myTodo, setMyTodo] = React.useState<string>('');
+    const [loadTodo, setLoadTodo] = React.useState<boolean>(false);
 
-    function changTodo() {
-        const id = Math.random();
+    async function changTodo() {
         if (myTodo.length) {
-            setMyTodos((prev) => [...prev, {id, title: myTodo, done: false, select: false}]);
+            const data = {title: myTodo};
+            await creatTodo(data);
+            setLoadTodo(!loadTodo);
             setMyTodo("");
         } else {
             alert('Вы не ввели задачу!')
@@ -25,6 +27,23 @@ function InputTodo() {
         setMyTodo(e.target.value);
     }
 
+    React.useEffect(() => {
+        getTodo().then(data => {
+            console.log('data', data);
+            const todos: Todo[] = [];
+            data.forEach((el: any) => {
+                const todo: Todo = {
+                    id: el._id,
+                    title: el.title,
+                    done: el.isCompleted,
+                    select: false,
+                }
+                todos.push(todo);
+            });
+            setMyTodos(todos);
+        });
+    }, [loadTodo]);
+
     return (
         <div className="Wrap">
             <div>ToDo</div>
@@ -33,7 +52,7 @@ function InputTodo() {
                 <button type="button" onClick={changTodo}>Добавить</button>
             </div>
             <ManyActionTodo setMyTodos={setMyTodos}/>
-            <Todos myTodos={myTodos} setMyTodos={setMyTodos}/>
+            <Todos myTodos={myTodos} setMyTodos={setMyTodos} setLoadTodo={setLoadTodo}/>
         </div>
     );
 }
