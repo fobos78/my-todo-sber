@@ -16,7 +16,7 @@ export async function creatTodo(data: any) {
         const response: any = await axios.post(`${API_URL}`, data);
         return response.data.todos;
     } catch (error) {
-        console.error('getTodo>>> error',error);
+        console.error('creatTodo>>> error',error);
     }
 }
 
@@ -25,13 +25,14 @@ export async function deleteTodo(id: string) {
         const response: any = await axios.delete(`${API_URL}/${id}`);
         return response.data.todos;
     } catch (error) {
-        console.error('getTodo>>> error',error);
+        console.error('deleteTodo>>> error',error);
     }
 }
 
-export async function updateTodo(id: string, data: any) {
+export async function updateTodo(id: string) {
     try {
-        const response: any = await axios.patch(`${API_URL}/${id}`, data);
+        const response: any = await axios.put(`${API_URL}/${id}`);
+        console.log('response>>>',response)
         return response.data.todos;
     } catch (error) {
         console.error('getTodo>>> error',error);

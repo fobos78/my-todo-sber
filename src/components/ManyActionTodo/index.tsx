@@ -2,12 +2,16 @@ import React from 'react';
 
 import './ManyActionTodo.css';
 import {Todo} from "../../types/Todo";
+import {deleteTodo} from "../../request";
+import {asyncForEach} from "../../utils";
 
-interface IManyActionTodo{
+interface IManyActionTodo {
+    myTodos: Todo[],
     setMyTodos: (myTodos: (prev: Todo[]) => Todo[]) => void,
+    setLoadTodo: (loadTodo: (prev: boolean) => boolean) => void;
 }
 
-function ManyActionTodo({setMyTodos}: IManyActionTodo) {
+function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
 
     function selectAll() {
         setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
@@ -32,8 +36,13 @@ function ManyActionTodo({setMyTodos}: IManyActionTodo) {
         }));
     }
 
-    function deleteSelected() {
+    async function deleteSelected() {
         setMyTodos((prev: Todo[]) => prev.filter((el: Todo) => el.select !== true));
+        const delTodos = myTodos.filter((el: Todo) => el.select === true);
+        await asyncForEach(delTodos, async (el: Todo) => {
+            await deleteTodo(el.id + '');
+        });
+        setLoadTodo(prev => !prev);
     }
 
     return (

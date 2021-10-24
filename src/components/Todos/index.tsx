@@ -6,14 +6,18 @@ import {deleteTodo, updateTodo} from "../../request";
 
 interface ITodos{
     myTodos: Todo[],
-    setMyTodos: (myTodos: (prev: Todo[]) => Todo[]) => void;
-    setLoadTodo: (loadTodo: (prev: boolean) => boolean) => void;
+    setMyTodos: (myTodos: (prev: Todo[]) => Todo[]) => void,
+    setLoadTodo: (loadTodo: (prev: boolean) => boolean) => void,
 }
 
 function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
 
     async function checkBox(id: number, done: boolean) {
         done ? await doneTodo(id) : await notDoneTodo(id);
+        // if(!done){
+        //     await updateTodo(id + '');
+        //     setLoadTodo(prev => !prev);
+        // }
     }
 
     async function doneTodo(id: number) {

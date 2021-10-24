@@ -12,7 +12,7 @@ function InputTodo() {
     const [myTodo, setMyTodo] = React.useState<string>('');
     const [loadTodo, setLoadTodo] = React.useState<boolean>(false);
 
-    async function changTodo() {
+    async function addTodo() {
         if (myTodo.length) {
             const data = {title: myTodo};
             await creatTodo(data);
@@ -28,10 +28,10 @@ function InputTodo() {
     }
 
     React.useEffect(() => {
-        getTodo().then(data => {
-            console.log('data', data);
+        getTodo()
+            .then(data => {
             const todos: Todo[] = [];
-            data.forEach((el: any) => {
+            data && data.forEach((el: any) => {
                 const todo: Todo = {
                     id: el._id,
                     title: el.title,
@@ -41,7 +41,8 @@ function InputTodo() {
                 todos.push(todo);
             });
             setMyTodos(todos);
-        });
+        })
+            .catch(error => console.log('ERROR>>', error));
     }, [loadTodo]);
 
     return (
@@ -49,9 +50,9 @@ function InputTodo() {
             <div>ToDo</div>
             <div className="InputWrap">
                 <input onChange={changTodos} value={myTodo}/>
-                <button type="button" onClick={changTodo}>Добавить</button>
+                <button type="button" onClick={addTodo}>Добавить</button>
             </div>
-            <ManyActionTodo setMyTodos={setMyTodos}/>
+            <ManyActionTodo myTodos={myTodos} setMyTodos={setMyTodos} setLoadTodo={setLoadTodo}/>
             <Todos myTodos={myTodos} setMyTodos={setMyTodos} setLoadTodo={setLoadTodo}/>
         </div>
     );
