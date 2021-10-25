@@ -12,35 +12,11 @@ interface ITodos{
 
 function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
 
-    async function checkBox(id: number, done: boolean) {
-        done ? await doneTodo(id) : await notDoneTodo(id);
-        // if(!done){
-        //     await updateTodo(id + '');
-        //     setLoadTodo(prev => !prev);
-        // }
+    async function checkBox(id: number) {
+            await updateTodo(id + '');
+            setLoadTodo(prev => !prev);
     }
 
-    async function doneTodo(id: number) {
-        setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
-            if (el.id === id) {
-                el.done = false;
-                return el;
-            } else {
-                return el;
-            }
-        }));
-    }
-
-    async function notDoneTodo(id: number) {
-        setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
-            if (el.id === id) {
-                el.done = true;
-                return el;
-            } else {
-                return el;
-            }
-        }));
-    }
 
     async function delTodo(id: number) {
         await deleteTodo(id + '');
@@ -89,7 +65,7 @@ function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
                             <div style={{textDecoration: todo.done ? "line-through" : "none"}}>{todo.title}</div>
                         </div>
                         <div className="Btn">
-                            <input type="checkbox" checked={todo.done} onChange={() => checkBox(todo.id, todo.done)}/>
+                            <input type="checkbox" checked={todo.done} onChange={() => checkBox(todo.id)}/>
                             <button type="button" onClick={() => delTodo(todo.id)}>Удалить</button>
                         </div>
                     </div>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './ManyActionTodo.css';
 import {Todo} from "../../types/Todo";
-import {deleteTodo} from "../../request";
+import {deleteTodo, updateTodo} from "../../request";
 import {asyncForEach} from "../../utils";
 
 interface IManyActionTodo {
@@ -27,17 +27,15 @@ function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
         }));
     }
 
-    function executeSelected() {
-        setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
-            if (!el.done) {
-                el.done = el.select;
-            }
-            return el;
-        }));
+    async function executeSelected() {
+            const delTodos = myTodos.filter((el: Todo) => el.select === true);
+            await asyncForEach(delTodos, async (el: Todo) => {
+                await updateTodo(el.id + '');
+            });
+            setLoadTodo(prev => !prev);
     }
 
     async function deleteSelected() {
-        setMyTodos((prev: Todo[]) => prev.filter((el: Todo) => el.select !== true));
         const delTodos = myTodos.filter((el: Todo) => el.select === true);
         await asyncForEach(delTodos, async (el: Todo) => {
             await deleteTodo(el.id + '');
