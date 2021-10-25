@@ -18,3 +18,33 @@
     justify-content: center;
     align-items: center;
 }
+.loading {
+    top: 100px;
+    width: 0vh;
+    height: 0vh;
+    margin: auto;
+    background: white;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading::after {
+    border: 2vmin solid lightblue;
+    border-top: 2vmin solid darkblue;
+    position: absolute;
+    margin-top: 2vmin;
+    margin-left: 2vmin;
+    width: 3vmin;
+    height: 3vmin;
+    content: "";
+    border-radius: 50%;
+    animation: spin .5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

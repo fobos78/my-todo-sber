@@ -4,7 +4,7 @@ import './Todos.css';
 import {Todo} from "../../types/Todo";
 import {deleteTodo, updateTodo} from "../../request";
 
-interface ITodos{
+interface ITodos {
     myTodos: Todo[],
     setMyTodos: (myTodos: (prev: Todo[]) => Todo[]) => void,
     setLoadTodo: (loadTodo: (prev: boolean) => boolean) => void,
@@ -13,38 +13,17 @@ interface ITodos{
 function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
 
     async function checkBox(id: number, done: boolean) {
-        done ? await doneTodo(id) : await notDoneTodo(id);
-        // if(!done){
-        //     await updateTodo(id + '');
-        //     setLoadTodo(prev => !prev);
-        // }
+        if(done){
+            return;
+        }
+        await updateTodo(id + '');
+        setLoadTodo(prev => true);
     }
 
-    async function doneTodo(id: number) {
-        setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
-            if (el.id === id) {
-                el.done = false;
-                return el;
-            } else {
-                return el;
-            }
-        }));
-    }
-
-    async function notDoneTodo(id: number) {
-        setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
-            if (el.id === id) {
-                el.done = true;
-                return el;
-            } else {
-                return el;
-            }
-        }));
-    }
 
     async function delTodo(id: number) {
         await deleteTodo(id + '');
-        setLoadTodo(prev => !prev);
+        setLoadTodo(prev => true);
     }
 
     function checkSelect(id: number, select: boolean) {

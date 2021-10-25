@@ -31,10 +31,9 @@ export async function deleteTodo(id: string) {
 
 export async function updateTodo(id: string) {
     try {
-        const response: any = await axios.put(`${API_URL}/${id}`);
-        console.log('response>>>',response)
+        const response: any = await axios.patch(`${API_URL}/${id}`);
         return response.data.todos;
     } catch (error) {
-        console.error('getTodo>>> error',error);
+        console.error('updateTodo>>> error',error);
     }
 }
