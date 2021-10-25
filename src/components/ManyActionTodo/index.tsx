@@ -29,20 +29,24 @@ function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
 
     async function executeSelected() {
         const executeTodos = myTodos.filter((el: Todo) => el.select === true);
-        await asyncForEach(executeTodos, async (el: Todo) => {
-            if (!el.done) {
-                await updateTodo(el.id + '');
-            }
-        });
-        setLoadTodo(prev => true);
+        if (executeTodos.length) {
+            await asyncForEach(executeTodos, async (el: Todo) => {
+                if (!el.done) {
+                    await updateTodo(el.id + '');
+                }
+            });
+            setLoadTodo(prev => true);
+        }
     }
 
     async function deleteSelected() {
         const delTodos = myTodos.filter((el: Todo) => el.select === true);
-        await asyncForEach(delTodos, async (el: Todo) => {
-            await deleteTodo(el.id + '');
-        });
-        setLoadTodo(prev => true);
+        if (delTodos.length) {
+            await asyncForEach(delTodos, async (el: Todo) => {
+                await deleteTodo(el.id + '');
+            });
+            setLoadTodo(prev => true);
+        }
     }
 
     return (
