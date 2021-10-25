@@ -13,6 +13,9 @@ interface IManyActionTodo {
 
 function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
 
+    const [selectTodos, setSelectTodos] = React.useState<Todo[]>([]);
+    const [doneTodos, setDoneTodos] = React.useState<Todo[]>([]);
+
     function selectAll() {
         setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
             el.select = true;
@@ -28,9 +31,8 @@ function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
     }
 
     async function executeSelected() {
-        const executeTodos = myTodos.filter((el: Todo) => el.select === true);
-        if (executeTodos.length) {
-            await asyncForEach(executeTodos, async (el: Todo) => {
+        if (selectTodos.length) {
+            await asyncForEach(selectTodos, async (el: Todo) => {
                 if (!el.done) {
                     await updateTodo(el.id + '');
                 }
@@ -40,23 +42,33 @@ function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
     }
 
     async function deleteSelected() {
-        const delTodos = myTodos.filter((el: Todo) => el.select === true);
-        if (delTodos.length) {
-            await asyncForEach(delTodos, async (el: Todo) => {
+        if (selectTodos.length) {
+            await asyncForEach(selectTodos, async (el: Todo) => {
                 await deleteTodo(el.id + '');
             });
             setLoadTodo(prev => true);
         }
     }
 
+    React.useEffect(() => {
+        setSelectTodos(myTodos.filter((el: Todo) => el.select === true));
+        setDoneTodos(myTodos.filter((el: Todo) => el.done === true));
+    },[myTodos]);
+
     return (
         <div className="ManyActionTodo">
             <button type="button" onClick={selectAll}>Выбрать все</button>
             <button type="button" onClick={clearAll}>Отчистить выбор
             </button>
-            <button type="button" onClick={executeSelected}>Выполнить выбранное
+            <button type="button"
+                    disabled={!selectTodos.filter((todo) => todo.select !== todo.done).length}
+                    onClick={executeSelected}>
+                Выполнить выбранное
             </button>
-            <button type="button" onClick={deleteSelected}>Удалить выбранное
+            <button type="button"
+                    disabled={!selectTodos.length}
+                    onClick={deleteSelected}>
+                Удалить выбранное
             </button>
         </div>
     );
