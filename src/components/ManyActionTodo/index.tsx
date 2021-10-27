@@ -14,7 +14,6 @@ interface IManyActionTodo {
 function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
 
     const [selectTodos, setSelectTodos] = React.useState<Todo[]>([]);
-    const [doneTodos, setDoneTodos] = React.useState<Todo[]>([]);
 
     function selectAll() {
         setMyTodos((prev: Todo[]) => prev.map((el: Todo) => {
@@ -52,7 +51,6 @@ function ManyActionTodo({myTodos, setMyTodos, setLoadTodo}: IManyActionTodo) {
 
     React.useEffect(() => {
         setSelectTodos(myTodos.filter((el: Todo) => el.select === true));
-        setDoneTodos(myTodos.filter((el: Todo) => el.done === true));
     },[myTodos]);
 
     return (

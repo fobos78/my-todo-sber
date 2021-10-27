@@ -13,7 +13,7 @@ interface ITodos {
 function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
 
     async function checkBox(id: number, done: boolean) {
-        if(done){
+        if (done) {
             return;
         }
         await updateTodo(id + '');
@@ -60,9 +60,7 @@ function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
                     <div className="Action"
                          style={{backgroundColor: todo.select ? "lightgreen" : "white"}}
                          onClick={() => checkSelect(todo.id, todo.select)}
-                    >
-
-                    </div>
+                    />
                     <div className="Todo">
                         <div>
                             <div style={{textDecoration: todo.done ? "line-through" : "none"}}>{todo.title}</div>
