@@ -12,6 +12,9 @@ interface ITodos {
 
 function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
 
+    const [isModalVisible, setIsModalVisible] = React.useState(false);
+    const [description, setDescription] = React.useState('');
+
     async function checkBox(id: number, done: boolean) {
         if (done) {
             return;
@@ -52,27 +55,68 @@ function Todos({myTodos, setMyTodos, setLoadTodo}: ITodos) {
         }));
     }
 
+    const showModalCustom = (id: number) => {
+        const todo = myTodos.find(el => id === el.id);
+        setDescription(JSON.stringify(todo));
+        setIsModalVisible(true);
+    };
+
+    const hideModalCustom = () => {
+        setIsModalVisible(false);
+        setDescription('');
+    };
+
 
     return (
-        <div className="Todos">
-            {myTodos && myTodos.map(todo =>
-                <div key={todo.id} className="WrapTodo">
-                    <div className="Action"
-                         style={{backgroundColor: todo.select ? "lightgreen" : "white"}}
-                         onClick={() => checkSelect(todo.id, todo.select)}
-                    />
-                    <div className="Todo">
-                        <div>
-                            <div style={{textDecoration: todo.done ? "line-through" : "none"}}>{todo.title}</div>
+        <>
+            {
+                isModalVisible &&
+                <div className="RootModalCustom" onClick={hideModalCustom}>
+                    <div className="WrapModalCustom" onClick={(e) => e.stopPropagation()}>
+                        <div className="ModalHeader">
+                            Выбранная задача
                         </div>
-                        <div className="Btn">
-                            <input type="checkbox" checked={todo.done} onChange={() => checkBox(todo.id, todo.done)}/>
-                            <button type="button" onClick={() => delTodo(todo.id)}>Удалить</button>
+                        <div className="DataInfoPre">
+                            <div className="DataInfoCode">
+                                {description}
+                            </div>
+                        </div>
+                        <div className="ModalFooter">
+                            <button onClick={hideModalCustom}>Закрыть</button>
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+            }
+
+            <div className="Todos">
+                {myTodos && myTodos.map(todo =>
+                    <div key={todo.id} className="WrapTodo">
+                        <div className="Action"
+                             style={{backgroundColor: todo.select ? "lightgreen" : "white"}}
+                             onClick={() => checkSelect(todo.id, todo.select)}
+                        />
+                        <div className="Todo">
+                            <div
+                                className="TodoText"
+                                onClick={() => showModalCustom(todo.id)}
+                            >
+                                <div
+                                    className={todo.done ? "CrossText" : "none"}
+
+                                >{todo.title}
+                                </div>
+                            </div>
+                            <div className="Btn">
+                                <input type="checkbox" checked={todo.done}
+                                       onChange={() => checkBox(todo.id, todo.done)}/>
+                                <button type="button" onClick={() => delTodo(todo.id)}>Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </>
+
     );
 }
 
